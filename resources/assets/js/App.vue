@@ -12,12 +12,12 @@
            <option class="form-control" v-for="title in finalarray" v-bind:value="title">{{title}}</option>
         </select>
         </div>        
-        <div class="col-sm-2">
+<!--         <div class="col-sm-2">
           <label for="customdatasy">Select y value</label>
            <select class="form-control" v-model="customdatasy" id="customdatasy" @change="selecty">
           <option class="form-control" v-for="title in finalarray" v-bind:value="title">{{title}}</option>
         </select>
-        </div>
+        </div> -->
       </div>
 
       <div class="row">
@@ -116,7 +116,7 @@ import RadarChart from './components/charts/RadarChart'
 // import DoughnutChart from './components/charts/DoughnutChart'
 // import PieChart from './components/charts/PieChart'
 //import PolarAreaChart from './components/charts/PolarAreaChart'
-import BubbleChart from './components/charts/BubbleChart'
+//import BubbleChart from './components/charts/BubbleChart'
 // import ScatterChart from './components/charts/ScatterChart'
 export default {
 
@@ -164,11 +164,11 @@ export default {
     LineChart,
     BarChart,
     RadarChart,
-    BubbleChart,
+    //BubbleChart,
     // ScatterChart, 
     // DoughnutChart,
     // PieChart,
-   //PolarAreaChart, 
+    //PolarAreaChart, 
       
 
   }
