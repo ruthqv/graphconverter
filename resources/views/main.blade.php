@@ -5,7 +5,12 @@
             <meta content="IE=edge" http-equiv="X-UA-Compatible">
                 <meta content="width=device-width, initial-scale=1" name="viewport">
                     <meta content="{{ csrf_token() }}" name="csrf-token">
+                      <link rel="shortcut icon" href="/favicon.ico">
+
                         <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css">
+                         
+                        <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css">
+
                             <title>
                                 Graphs Big Data and Programing
                             </title>
@@ -21,7 +26,7 @@
             <div class="alert alert-danger">
                 {{$error}}
             </div>
-            @endif    
+            @endif
             @if(!empty($companies))
             <script>
                 window.companies = {!! json_encode($companies) !!};
@@ -34,15 +39,30 @@
             <div class="row">
                 <div class="col-sm-12 text-center panel">
                     <h1>
-                        Simple Chart Converter
+                        Simple Chart Converter App 
+                        <button data-tooltip="This app was built with Laravel, vue.js">?</button>
+
                     </h1>
-                    <p>
-                        With Laravel and vue.js we can mannage Big Data sources and convert easy into graphics
-                    </p>
-                    <a href="{{ route('download', ['filename' => 'companies.xls']) }}">
+                    <div class="col-sm-10">
+
+                   <p><a href="{{ route('download', ['filename' => 'companies.xls']) }}">
                         Download this example
                     </a>
                     in wich you can add your own data, once you have done, you can upload file here in xls format, and get your graph just with your own datas.
+                    <br>
+                   </p>
+                    <p class="text-left"><span class="small">
+                    You can fork the project on <strong>
+                    <a target="_blank" href="https://github.com/ruthqv/graphconverter"><i class="fa fa-github" aria-hidden="true"></i>
+                        Github     </a>
+                    </strong><br>
+                     (RQThemes® MIT Licence)       
+                    </span>
+                    </p>
+
+                    </div>
+
+                    <div class="col-sm-2">
                     <form action="{{route('uploadExcel')}}" class="form-group" enctype="multipart/form-data" method="POST">
                         {{ csrf_field() }}
                         <input class="form-control" name="file" type="file">
@@ -51,6 +71,8 @@
                             </button>
                         </input>
                     </form>
+                    </div>
+
                 </div>
             </div>
             <div class="col-sm-12">

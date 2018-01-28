@@ -22,39 +22,52 @@ class ExcelController extends Controller
         $fileName  = $file->getClientOriginalName();
         //$storelocal->put('xls/' . $fileName, file_get_contents($file), 'public');
 
+        $data = \Excel::load($file, function($reader) {
+        $reader->ignoreEmpty();
+        $reader->skipRows(0);    
+        $reader->limitColumns(4);
+        }, 'UTF-8')->get();
 
-        if ($extension === 'xls') {
+        if ($file && $extension === 'xls' && $data->count()) {
 
             // $companies = Company::first();
             // if (!empty($companies)) {
             //     Company::truncate();
             // }
 
-            $data = \Excel::load(Input::file('file'))->get();
-
-            // print_r($data); die();
-
-            if ($data->count() /*&& empty(Company::first())*/  ) {
 
                 foreach ($data as $key => $value) {
+                    $skip=0;    
+                   
+                    foreach ($value as $keys => $valuevalue) {
+                        if(empty($valuevalue)){
+                           $skip = 1; 
+                        }
+                    }
+                    if($skip === 0){
                         "{$key} => {$value} ";
-
+                    }else{
+                        unset($data[$key]);
+                    }
                 }
+
+
                 if (!empty($data)) {
                 	//print_r($arr);die();
                    // $companies = Company::insert($arr);
                     //dd('Insert Record successfully.');
                    // $companies = Company::all();
                    	$companies = collect($data);
+                    //print_r($companies); die();
+
                     return view('main')->with(
                         'companies', $companies);
                 }
 
+            }else{
+            	return view('main')->with(
+                  'error', 'Not supported format');
             }
-        }else{
-        	return view('main')->with(
-              'error', 'Not supported format');
-        }
 
     }
 

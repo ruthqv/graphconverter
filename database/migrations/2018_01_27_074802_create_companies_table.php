@@ -14,15 +14,14 @@ class CreateCompaniesTable extends Migration
     public function up()
     {
         Schema::create('companies', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('active');
+           // $table->increments('id');
+           // $table->string('active');
             $table->string('name');
             $table->string('capital');
-            $table->string('currency');
             $table->string('enviroment');
             $table->string('employees');
 
-            $table->timestamps();
+           // $table->timestamps();
         });
     }
 
