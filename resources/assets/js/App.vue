@@ -172,8 +172,12 @@ export default {
 
   methods:{
 	
-
       selectx: function () {
+        if(this.customdatasy !== defaulty.title){
+          console.log(this.customdatasx);
+            this.selecty()
+
+        }else{
         for (x = 0; x < finalarraycount; x++) {
           if(data[x].title == this.customdatasx){
             this.chartData ={
@@ -183,12 +187,17 @@ export default {
              } 
           }
         }
+
+        }
+
       },  
 
       selecty: function () {
       var title;  
       var labels; 
       var xvalue;
+      var indexy;
+
         //first we get title and lables from customdatasx if exist, else we get default datas data[0]... 
           if(this.customdatasx !== defaultx.title){
             xvalue= this.customdatasx
@@ -201,17 +210,19 @@ export default {
               title  = data[x].title
               labels = data[x].datas
           }
+
+          if(data[x].title == this.customdatasy ){
+              indexy = x
+          }
         }
         //now we need mount the sheets with customy data from the options of the sheet:
-        var customsheets = getAllSheets(xvalue)
-
          this.chartData ={
                   'title' :title,
                   'labels': labels,
-                  'datasets': customsheets,
+                  'datasets':[getCustomSheet(indexy)] 
           }       
-       console.log(this.chartData)
-
+          
+          console.log(this.chartData)
       } 
   },
 
@@ -221,9 +232,9 @@ export default {
     BarChart,
     RadarChart,
     //BubbleChart,
-    // ScatterChart, 
-    // DoughnutChart,
-    // PieChart,
+    //ScatterChart, 
+    //DoughnutChart,
+    //PieChart,
     //PolarAreaChart, 
       
 
