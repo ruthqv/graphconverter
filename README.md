@@ -8,8 +8,8 @@
 
 - [Vue.js](https://laravel.com/docs).
 - [Laravel](https://laravel.com/docs).
-- [vue-chart](https://laravel.com/docs).
+- [vue-chart](https://github.com/apertureless/vue-chartjs).
 
+- You can see the demo of the proyect here : [SEE DEMO](http://graphconverter.webandwebs.com/).
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
 
