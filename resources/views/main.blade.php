@@ -40,7 +40,7 @@
                 <div class="col-sm-12 text-center panel">
                     <h1>
                         Simple Chart Converter App 
-                        <button data-tooltip="This app was built with Laravel, vue.js">?</button>
+                        <button data-tooltip="This app was built with Laravel, vue.js and vue-chart">?</button>
 
                     </h1>
                     <div class="col-sm-10">

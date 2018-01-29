@@ -18,20 +18,27 @@
           <option class="form-control" v-for="title in finalarray" v-bind:value="title">{{title}}</option>
         </select>
         </div>
+
       </div>
+        <div class="row">
+                <br>Your x value : {{chartData.title}}
+                <br>Your y value : {{customdatasy}}
+        </div>
 
       <div class="row">
         
-        <LineChart :chartData="chartData"></LineChart>
-          <br>Your x value : {{chartData.title}}
-          <br>
-          <div @click="exportimage" class="btn btn-default">
-          <i class="fa fa-download"></i>
-          <span class="hidden-xs hidden-sm ml5">Export image as png</span>
-          </div>
- 
-    	  <BarChart :chartData="chartData"></BarChart>
-        <RadarChart :chartData="chartData"></RadarChart>       
+        <LineChart :chartData="chartData" :options="{responsive: true, maintainAspectRatio: true}"
+></LineChart>
+        <ExportImage :idtoexport="'line-chart'"></ExportImage>
+        <hr>
+
+    	  <BarChart :chartData="chartData" :options="{responsive: true, maintainAspectRatio: true}"></BarChart>
+        <ExportImage :idtoexport="'bar-chart'"></ExportImage>
+        <hr>
+
+        <RadarChart :chartData="chartData" :options="{responsive: true, maintainAspectRatio: true}"></RadarChart>       
+        <ExportImage :idtoexport="'radar-chart'"></ExportImage>
+        <hr>
 
         <!-- <BubbleChart></BubbleChart> -->
        
@@ -65,37 +72,48 @@ var title
 var datas = []
 var x;
 for (x = 0; x < finalarraycount; x++) {
-      companiesdata =companies.map(function(key) {
-             return key[''+finalarray[x] +''];
-         });
-         title = finalarray[x]
-         datas = companiesdata
-         data[x] =  {title:title, datas:datas}
+    companiesdata =companies.map(function(key) {
+           return key[''+finalarray[x] +''];
+       });
+       title = finalarray[x]
+       datas = companiesdata
+       data[x] =  {title:title, datas:datas}
 
 };
 
-//console.log(data[0])
 
-//set array for get options
+
+
+
+
+function getAllSheets(customx) {
+
+//set array for default dataset
 var seet = {}
-var sheets =[seet]
+var sheets =[]
 var y;
 
-for (y = 0; y < finalarraycount; y++) {
-   seet = {
-      //Data to be represented on x-axis
-      label: data[y].title,
-      //Data to be represented on y-axis
-      data: data[y].datas,
-      //beautify graphs options
-      backgroundColor: getRandomColor(),
-   }
- // console.log(seet)
- sheets.push(seet); 
-};
+  for (y = 0; y < finalarraycount; y++) {
+    if(customx !== data[y].title){      
+        seet = getCustomSheet(y)
+       sheets.push(seet)       
+
+    }
+  }
+  return sheets
+}
 
 
-//console.log(finalarray)
+function getCustomSheet(i) {
+     return {
+        //Data to be represented on x-axis
+        label: data[i].title,
+        //Data to be represented on y-axis
+        data: data[i].datas,
+        //beautify graphs options
+        backgroundColor: getRandomColor(),
+      }
+}
 
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
@@ -109,6 +127,8 @@ function getRandomColor() {
   return result;
 }
 
+
+
 import LineChart from './components/charts/LineChart'
 import BarChart from './components/charts/BarChart'
 import RadarChart from './components/charts/RadarChart'
@@ -118,49 +138,85 @@ import RadarChart from './components/charts/RadarChart'
 //import PolarAreaChart from './components/charts/PolarAreaChart'
 //import BubbleChart from './components/charts/BubbleChart'
 // import ScatterChart from './components/charts/ScatterChart'
+
+import ExportImage from './components/images/Export.vue'
+
+//console.log(sheets);
+
+var defaultx = {
+'title' : data[0].title,
+'datas' :  data[0].datas,
+}
+var defaulty = {
+'title' : data[1].title,
+'datas' :  data[1].datas,
+}
+
+
 export default {
 
   data() {
       return {
         chartData: {
-          'title':data[0].title,
-          'labels': data[0].datas,
-          'datasets': sheets,
+          'title':defaultx.title,
+          'labels': defaultx.datas,
+          'datasets': getAllSheets(defaultx.title),
         },
 
         finalarray: finalarray,
-        customdatasx: '',
-        customdatasy: '',
+        customdatasx: defaultx.title,
+        customdatasy: defaulty.title,
       	data:data,
       }	
   },
 
   methods:{
-      exportimage: function () {
-        let canvas = document.getElementById('line-chart').toDataURL('image/png')
-        let link = document.createElement('a')
-        link.download = 'image'
-        link.href = canvas
-        link.click()
-      },  	
+	
+
       selectx: function () {
-        for (x = 0; x < finalarray.length; x++) {
+        for (x = 0; x < finalarraycount; x++) {
           if(data[x].title == this.customdatasx){
             this.chartData ={
               'title' :data[x].title,
               'labels': data[x].datas,
-              'datasets': sheets,
-
+              'datasets': getAllSheets(this.customdatasx),
              } 
           }
         }
       },  
 
       selecty: function () {
-        console.log(this.customdatasy)
+      var title;  
+      var labels; 
+      var xvalue;
+        //first we get title and lables from customdatasx if exist, else we get default datas data[0]... 
+          if(this.customdatasx !== defaultx.title){
+            xvalue= this.customdatasx
+          }else{
+            xvalue= defaultx.title
+          }
+
+        for (x = 0; x < finalarraycount; x++) {
+          if(data[x].title == xvalue){
+              title  = data[x].title
+              labels = data[x].datas
+          }
+        }
+        //now we need mount the sheets with customy data from the options of the sheet:
+        var customsheets = getAllSheets(xvalue)
+
+         this.chartData ={
+                  'title' :title,
+                  'labels': labels,
+                  'datasets': customsheets,
+          }       
+       console.log(this.chartData)
+
       } 
   },
+
   components: {
+    ExportImage,
     LineChart,
     BarChart,
     RadarChart,
