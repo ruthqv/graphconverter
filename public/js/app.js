@@ -64664,12 +64664,11 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 //
 //
 //
+//
+//
 
 
 var companies = window.companies;
-
-//console.log(companies)
-
 var _iteratorNormalCompletion = true;
 var _didIteratorError = false;
 var _iteratorError = undefined;
@@ -64739,6 +64738,7 @@ var companiesdata = [];
 var title;
 var datas = [];
 var x;
+
 for (x = 0; x < finalarraycount; x++) {
   companiesdata = companies.map(function (key) {
     return key['' + finalarray[x] + ''];
@@ -64756,11 +64756,13 @@ function getAllSheets(customx) {
   var y;
 
   for (y = 0; y < finalarraycount; y++) {
-    if (customx !== _data[y].title) {
+    if (customx !== _data[y].title && !isNaN(_data[y].datas[1])) {
+
       seet = getCustomSheet(y);
       sheets.push(seet);
     }
   }
+
   return sheets;
 }
 
@@ -64771,31 +64773,28 @@ function getCustomSheet(i) {
     //Data to be represented on y-axis
     data: _data[i].datas,
     //beautify graphs options
-    backgroundColor: getRandomColor()
+    backgroundColor: getRandomColor(),
+    borderColor: getRandomColor(),
+    borderWidth: 1
   };
 }
 
 function getRandomColor() {
-  var letters = '0123456789ABCDEF';
-  var color = '#';
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-
-  var result = [color, ''][Math.floor(Math.random() * 2)];
-
-  return result;
+  var o = Math.round,
+      r = Math.random,
+      s = 255;
+  return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + r().toFixed(1) + ')';
 }
 
 
 
 
 
-// import DoughnutChart from './components/charts/DoughnutChart'
-// import PieChart from './components/charts/PieChart'
+//import DoughnutChart from './components/charts/DoughnutChart'
+//import PieChart from './components/charts/PieChart'
 //import PolarAreaChart from './components/charts/PolarAreaChart'
 //import BubbleChart from './components/charts/BubbleChart'
-// import ScatterChart from './components/charts/ScatterChart'
+//import ScatterChart from './components/charts/ScatterChart'
 
 
 
@@ -64819,55 +64818,64 @@ var defaulty = {
         'datasets': getAllSheets(defaultx.title)
       },
 
-      finalarray: finalarray,
+      chartOptionsLine: {
+        'responsive': true,
+        'maintainAspectRatio': true,
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      },
+
       customdatasx: defaultx.title,
       customdatasy: defaulty.title,
-      data: _data
+      finalarray: finalarray,
+      data: _data,
+      errors: ''
     };
   },
 
 
   methods: {
-
     selectx: function selectx() {
-      if (this.customdatasy !== defaulty.title) {
-        console.log(this.customdatasx);
-        this.selecty();
-      } else {
-        for (x = 0; x < finalarraycount; x++) {
-          if (_data[x].title == this.customdatasx) {
-            this.chartData = {
-              'title': _data[x].title,
-              'labels': _data[x].datas,
-              'datasets': getAllSheets(this.customdatasx)
-            };
-          }
+
+      for (x = 0; x < finalarraycount; x++) {
+        if (_data[x].title == this.customdatasx) {
+          this.chartData = {
+            'title': _data[x].title,
+            'labels': _data[x].datas,
+            'datasets': getAllSheets(this.customdatasx)
+          };
         }
       }
     },
 
     selecty: function selecty() {
-      var title;
-      var labels;
-      var xvalue;
+      var title = defaultx.title;
+      var labels = defaultx.datas;
+      var xvalue = defaultx.title;
       var indexy;
-
       //first we get title and lables from customdatasx if exist, else we get default datas data[0]... 
       if (this.customdatasx !== defaultx.title) {
         xvalue = this.customdatasx;
-      } else {
-        xvalue = defaultx.title;
       }
 
       for (x = 0; x < finalarraycount; x++) {
+
         if (_data[x].title == xvalue) {
           title = _data[x].title;
           labels = _data[x].datas;
         }
 
-        if (_data[x].title == this.customdatasy) {
+        if (_data[x].title == this.customdatasy && !isNaN(_data[x].datas[1])) {
           indexy = x;
         }
+      }
+      if (indexy == undefined) {
+        this.errors = 'Please, dont use string values for y';
       }
       //now we need mount the sheets with customy data from the options of the sheet:
       this.chartData = {
@@ -64875,8 +64883,6 @@ var defaulty = {
         'labels': labels,
         'datasets': [getCustomSheet(indexy)]
       };
-
-      console.log(this.chartData);
     }
   },
 
@@ -64909,12 +64915,11 @@ var defaulty = {
   mixins: [__WEBPACK_IMPORTED_MODULE_0_vue_chartjs__["d" /* mixins */].reactiveProp],
   props: ['chartData', 'options'],
   mounted: function mounted() {
-    // console.log(this.chartData)
     this.renderChart(this.chartData, this.options);
   },
 
   watch: {
-    'chartData': function chartData(to, from) {
+    'chartData': function chartData() {
       this.renderChart(this.chartData, this.options);
     }
   }
@@ -78874,12 +78879,16 @@ var render = function() {
   return _c("div", { staticClass: "container text-center" }, [
     _c("h1", [_vm._v("GRAPHICS CHARTS")]),
     _vm._v(" "),
+    _c("hr"),
+    _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("h3", [_vm._v("Select options")]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-2" }, [
+      _vm.errors ? _c("div", [_vm._v(_vm._s(_vm.errors))]) : _vm._e(),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-xs-6" }, [
         _c("label", { attrs: { for: "customdatasx" } }, [
-          _vm._v("Select x value")
+          _vm._v("Select x value(reload values)")
         ]),
         _vm._v(" "),
         _c(
@@ -78921,10 +78930,14 @@ var render = function() {
               [_vm._v(_vm._s(title))]
             )
           })
-        )
+        ),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _c("h1", [_vm._v("Your 'x' value : " + _vm._s(_vm.chartData.title))])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-2" }, [
+      _c("div", { staticClass: "col-xs-6" }, [
         _c("label", { attrs: { for: "customdatasy" } }, [
           _vm._v("Select y value")
         ]),
@@ -78968,17 +78981,12 @@ var render = function() {
               [_vm._v(_vm._s(title))]
             )
           })
-        )
+        ),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _c("h1", [_vm._v("Your 'y' value : " + _vm._s(_vm.customdatasy))])
       ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c("br"),
-      _vm._v(
-        "Your x value : " + _vm._s(_vm.chartData.title) + "\n                "
-      ),
-      _c("br"),
-      _vm._v("Your y value : " + _vm._s(_vm.customdatasy) + "\n        ")
     ]),
     _vm._v(" "),
     _c(
@@ -78986,10 +78994,7 @@ var render = function() {
       { staticClass: "row" },
       [
         _c("LineChart", {
-          attrs: {
-            chartData: _vm.chartData,
-            options: { responsive: true, maintainAspectRatio: true }
-          }
+          attrs: { chartData: _vm.chartData, options: _vm.chartOptionsLine }
         }),
         _vm._v(" "),
         _c("ExportImage", { attrs: { idtoexport: "line-chart" } }),
