@@ -10,7 +10,9 @@ window.Vue = require('vue');
 var VueResource = require('vue-resource');
 import VueRouter from 'vue-router'
 import App from './App.vue'
+import BootstrapVue from 'bootstrap-vue'
 
+Vue.use(BootstrapVue);
 Vue.use(VueResource)
 Vue.use(VueRouter)
 

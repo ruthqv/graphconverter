@@ -1,14 +1,16 @@
-
-import { Pie } from 'vue-chartjs'
+import { Pie, mixins } from 'vue-chartjs'
  
 export default {
-  extends: Pie,
-  mounted () {
-    // Overwriting base render method with actual data.
-    this.renderChart({
-            labels: this.$parent.dataforx.datas,           
-            datasets: this.$parent.sheets
-
-    })
-  }
+	extends: Pie,
+    mixins: [mixins.reactiveProp],
+    props: ['chartData', 'options'],
+    mounted () {
+    	//console.log(this.chartData)
+        this.renderChart(this.chartData, this.options)
+    },
+	watch: {
+	  	'chartData' (to, from) {
+	    this.renderChart(this.chartData, this.options)
+	  }
+	},
 }
