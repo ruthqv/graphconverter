@@ -10,9 +10,5 @@ export default {
     	//console.log(this.chartData)
         this.renderChart(this.chartData, this.options)
     },
-	watch: {
-	  	'chartData' (to, from) {
-	    this.renderChart(this.chartData, this.options)
-	  }
-	},
+
 }

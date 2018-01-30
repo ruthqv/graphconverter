@@ -13,9 +13,9 @@
       <LineCharts></LineCharts>
       </div>
 
-      <div class="row" v-if="charttype == 'timeline'">
+<!--       <div class="row" v-if="charttype == 'timeline'">
       <TimeLine></TimeLine>      
-      </div>
+      </div> -->
 </div>
 
 </div>  
@@ -23,7 +23,7 @@
 <script>
 
 
-import TimeLine from './TimeLine'
+// import TimeLine from './TimeLine'
 import LineCharts from './LineCharts'
 
 
@@ -36,7 +36,7 @@ name:'Graphs',
   },
 
   components: {
-     TimeLine,
+     // TimeLine,
      LineCharts
   
 
