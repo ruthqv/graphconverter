@@ -11,7 +11,7 @@
           <div class="col-xs-4">
           <label for="customdatasx">Select x value(reload values)</label>
            <select class="form-control" v-model="customdatasx" id="customdatasx" @change="selectx">
-           <option class="form-control" v-for="title in finalarray" v-bind:value="title">{{title}}</option>
+           <option class="form-control" v-for="title in finalarray" v-if="title !== '_id'" v-bind:value="title">{{title}}</option>
         </select>
             <br>
             <p>Your 'x' value : {{chartDataLine.title}}</p>
@@ -20,7 +20,7 @@
         <div class="col-xs-4">
           <label for="customdatasy">Select y value</label>
            <select class="form-control" v-model="customdatasy" id="customdatasy" @change="selecty">
-          <option class="form-control" v-for="title in finalarray" v-bind:value="title">{{title}}</option>
+          <option class="form-control" v-for="title in finalarray" v-if="title !== '_id'" v-bind:value="title">{{title}}</option>
         </select>
           <br>
             <p>Your 'y' value : {{customdatasy}}</p>
@@ -76,12 +76,17 @@
   
 var companies = window.companies;
 for (let [key, value] of Object.entries(companies)) {
+  if(value !== 'id' && value !=='_id' ){
       var array = value;
+  }
 }
 var finalarray = [];
 
 for (let [keys, values] of Object.entries(array)) {
+    if(keys !== 'id' && keys !=='_id' ){
+
     finalarray.push(keys);
+  }
 }
 
 var finalarraycount = finalarray.length
@@ -152,15 +157,15 @@ function getRandomColor() {
 
 
 
-import LineChart from '../components/charts/LineChart'
-import BarChart from '../components/charts/BarChart'
-import RadarChart from '../components/charts/RadarChart'
+import LineChart from './charts/LineChart'
+import BarChart from './charts/BarChart'
+import RadarChart from './charts/RadarChart'
 
-import DoughnutChart from '../components/charts/DoughnutChart'
-import PieChart from '../components/charts/PieChart'
-import PolarAreaChart from '../components/charts/PolarAreaChart'
+import DoughnutChart from './charts/DoughnutChart'
+import PieChart from './charts/PieChart'
+import PolarAreaChart from './charts/PolarAreaChart'
 
-import ExportImage from '../components/images/Export.vue'
+import ExportImage from '../Images/Export.vue'
 //console.log(sheets);
 
 var defaultx = {
@@ -225,16 +230,10 @@ name:'Graphs',
         finalarray: finalarray,
         data:data,
         errors: '',
-        charttype: 'linear'
-
       } 
   },
 
   methods:{ 
-      changetotimecharts: function(type){
-        this.charttype = type
-
-      },
 
       selectx: function () {
 

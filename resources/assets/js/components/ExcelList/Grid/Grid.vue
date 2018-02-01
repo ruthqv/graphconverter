@@ -1,6 +1,9 @@
-<!-- component template -->
-<script type="text/x-template" id="grid-template">
-  <table>
+
+<template>
+<div>
+
+
+<table class="responsive-table">
     <thead>
       <tr>
         <th v-for="key in columns"
@@ -10,42 +13,34 @@
           <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
           </span>
         </th>
+
       </tr>
     </thead>
     <tbody>
       <tr v-for="entry in filteredData">
         <td v-for="key in columns">
-          {{entry[key]}}
+ 		{{entry[key]}}
         </td>
+
       </tr>
+
     </tbody>
-  </table>
-</script>
+ </table>
 
-<!-- demo root element -->
-<div id="demo">
-  <form id="search">
-    Search <input name="query" v-model="searchQuery">
-  </form>
-  <demo-grid
-    :data="gridData"
-    :columns="gridColumns"
-    :filter-key="searchQuery">
-  </demo-grid>
 </div>
-
+</template>
 
 <script>
-import Vue from 'vue'
 
-Vue.component('TimeLine', {
-  name: 'TimeLine',
-  template: '#grid-template',
-  props: {
+
+export default {
+
+name:'Grid',
+   props: {
     data: Array,
     columns: Array,
     filterKey: String
-  },
+  }, 
   data: function () {
     var sortOrders = {}
     this.columns.forEach(function (key) {
@@ -53,10 +48,21 @@ Vue.component('TimeLine', {
     })
     return {
       sortKey: '',
-      sortOrders: sortOrders
+      sortOrders: sortOrders,
+      entrydisabled:true
     }
   },
-  computed: {
+  methods:{ 
+
+		sortBy: function(key){
+	      this.sortKey = key
+	      this.sortOrders[key] = this.sortOrders[key] * -1				
+		},
+
+
+  },
+
+ computed: {
     filteredData: function () {
       var sortKey = this.sortKey
       var filterKey = this.filterKey && this.filterKey.toLowerCase()
@@ -73,7 +79,9 @@ Vue.component('TimeLine', {
         data = data.slice().sort(function (a, b) {
           a = a[sortKey]
           b = b[sortKey]
+           if(!isNaN(a) && !isNaN(b) ){
           return (a === b ? 0 : a > b ? 1 : -1) * order
+          }
         })
       }
       return data
@@ -84,27 +92,7 @@ Vue.component('TimeLine', {
       return str.charAt(0).toUpperCase() + str.slice(1)
     }
   },
-  methods: {
-    sortBy: function (key) {
-      this.sortKey = key
-      this.sortOrders[key] = this.sortOrders[key] * -1
-    }
-  }
-})
+  
+}	
 
-// bootstrap the demo
-var demo = new Vue({
-  el: '#demo',
-  data: {
-    searchQuery: '',
-    gridColumns: ['name', 'power'],
-    gridData: [
-      { name: 'Chuck Norris', power: Infinity },
-      { name: 'Bruce Lee', power: 9000 },
-      { name: 'Jackie Chan', power: 7000 },
-      { name: 'Jet Li', power: 8000 }
-    ]
-  }
-})
 </script>
-

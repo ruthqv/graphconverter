@@ -9,7 +9,9 @@ require('./bootstrap');
 window.Vue = require('vue');
 var VueResource = require('vue-resource');
 import VueRouter from 'vue-router'
-import App from './App.vue'
+import App from './views/App.vue'
+import Years from './views/Years.vue'
+
 import BootstrapVue from 'bootstrap-vue'
 
 Vue.use(BootstrapVue);
@@ -21,7 +23,7 @@ const router = new VueRouter({
     routes: [
         {
             path: '/',
-            name: 'chart',
+            name: 'appexample',
             component: App
         },
 
@@ -30,6 +32,12 @@ const router = new VueRouter({
             name: 'app',
             component: App
         },
+        {
+            path: '/years',
+            name: 'years',
+            component: Years
+        },
+
     ],
 });
 

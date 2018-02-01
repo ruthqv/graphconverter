@@ -27,6 +27,7 @@ Route::get('download/{file_name}', function($file_name = null)
 
 
 Route::get('/{path?}', function(){
-	$examplecompanies = App\Company::all();
-	return view('main')->with('examplecompanies', $examplecompanies);
+	$examplecompanies = DB::collection('companies')->get();
+	$examplecompaniesyears = DB::collection('companiesyears')->get();
+	return view('main')->with(['examplecompanies'=> $examplecompanies, 'examplecompaniesyears' => $examplecompaniesyears]);
 })->name('main');
