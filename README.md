@@ -1,6 +1,7 @@
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
 
+## Ejemplo SPA APP, con Laravel, Vue.js , MongoDB 
 
 ## Example SPA APP, with Laravel, Vue.js , MongoDB and vue-chart components. Laravel importing excell and convert into graphs.
 
@@ -10,7 +11,7 @@ Download, change .env datas with your own to stablish connection with MongoDB. C
 - [Vue.js](https://laravel.com/docs).
 - [Laravel](https://laravel.com/docs).
 - [vue-chart](https://github.com/apertureless/vue-chartjs).
-
+- [MongoDB](https://www.mongodb.com/es).
 - You can see the demo of the proyect here : [SEE DEMO](http://graphconverter.webandwebs.com/).
 
 
