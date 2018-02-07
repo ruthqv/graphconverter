@@ -19,32 +19,40 @@
 <script>
 import Grid from './Grid/Grid.vue'
 
-var companies = window.companies;
-for (let [key, value] of Object.entries(companies)) {
-      var array = value;
-}
 
-var finalarray = [];
 
-for (let [keys, values] of Object.entries(array)) {
-     if(keys !== 'id' && keys !=='_id' ){
-
-    finalarray.push(keys);
-  }
-}
-
-var finalarraycount = finalarray.length
 
 export default {
 
 name:'ExcelList',
-  
+  props:['companies'],
   data() {
       return {
         searchQuery: '',
-        gridColumns: finalarray,
-        gridData : companies
+        gridColumns: this.getfinalarray(),
+        gridData : this.companies
       } 
+  },
+
+  methods:{
+        getfinalarray:function(){
+        for (let [key, value] of Object.entries(this.companies)) {
+            var array = value;
+        }
+
+        var finalarray = [];
+
+        for (let [keys, values] of Object.entries(array)) {
+            if(keys !== 'id' && keys !=='_id' ){
+
+            finalarray.push(keys);
+            }
+        }
+
+      // var finalarraycount = finalarray.length
+
+      return finalarray
+    }
   },
 
   components: {

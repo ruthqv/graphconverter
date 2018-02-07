@@ -11,11 +11,11 @@
       <hr>
       <div class="row">
           <div class="row" v-if="charttype == 'LineCharts'">
-            <LineCharts></LineCharts>
+            <LineCharts :companies="companies"></LineCharts>
           </div>
 
           <div class="row" v-if="charttype == 'ExcelList'">
-              <ExcelList></ExcelList>      
+              <ExcelList :companies="companies"></ExcelList>      
           </div>
       </div>
 
@@ -27,14 +27,12 @@
 import ExcelList from './ExcelList/ExcelList.vue'
 import LineCharts from './LineCharts/LineCharts.vue'
 
-
-
-
 export default {
 name:'Graphs',
   data() {
       return {
         charttype: 'LineCharts',
+        companies: window.companies
       } 
   },
 

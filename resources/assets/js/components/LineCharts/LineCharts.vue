@@ -73,89 +73,6 @@
 </div>     
 </template>
 <script>
-  
-var companies = window.companies;
-for (let [key, value] of Object.entries(companies)) {
-  if(value !== 'id' && value !=='_id' ){
-      var array = value;
-  }
-}
-var finalarray = [];
-
-for (let [keys, values] of Object.entries(array)) {
-    if(keys !== 'id' && keys !=='_id' ){
-
-    finalarray.push(keys);
-  }
-}
-
-var finalarraycount = finalarray.length
-
-var data = {}
-var companiesdata = []
-var title
-var datas = []
-var x;
-
-for (x = 0; x < finalarraycount; x++) {
-    companiesdata =companies.map(function(key) {
-           return key[''+finalarray[x] +''];
-       });
-       title = finalarray[x]
-       datas = companiesdata
-       data[x] =  {title:title, datas:datas}
-
-};
-
-function getAllSheets(customx) {
-//set array for default dataset
-var seet = {}
-var sheets =[]
-var y;
-
-  for (y = 0; y < finalarraycount; y++) {
-    if(customx !== data[y].title && (!isNaN(data[y].datas[1])) ){      
-
-       seet = getCustomSheet(y)
-       sheets.push(seet)       
-
-    }
-  }
-
-  return sheets
-}
-
-function getCustomSheet(i, numtimes = null) {
-var backgroundColor =getRandomColor() 
-var borderColor = getRandomColor() 
-
-if(numtimes !== null){
-  backgroundColor = [] 
-  for(var e = 0; e  < numtimes; e ++){
-      var back = getRandomColor() 
-      backgroundColor.push(back)
-  }
-}
-     return {
-        //Data to be represented on x-axis
-        label: data[i].title,
-        //Data to be represented on y-axis
-        data: data[i].datas,
-        //beautify graphs options
-        borderWidth: 2,
-        borderJoinStyle: 'bevel',
-        cubicInterpolationMode: 'monotone',
-        backgroundColor:backgroundColor,
-        borderColor:borderColor,
-      }
-}
-
-function getRandomColor() {
-  var o = Math.round, r = Math.random, s = 255;
-  return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
-}
-
-
 
 import LineChart from './charts/LineChart'
 import BarChart from './charts/BarChart'
@@ -168,32 +85,24 @@ import PolarAreaChart from './charts/PolarAreaChart'
 import ExportImage from '../Images/Export.vue'
 //console.log(sheets);
 
-var defaultx = {
-'index' : 0,
-'title' : data[0].title,
-'datas' :  data[0].datas,
-}
-var defaulty = {
-'index' : 1,  
-'title' : data[1].title,
-'datas' :  data[1].datas,
-}
-
 export default {
 name:'Graphs',
+  
+  props: ['companies'],
+
   data() {
       return {
 
         chartDataLine: {
-          'title':defaultx.title,
-          'labels': defaultx.datas,
-          'datasets': getAllSheets(defaultx.title),
+          'title':'',
+          'labels': '',
+          'datasets': '',
         },
 
         chartDataPie: {
-          'title':defaultx.title,
-          'labels': defaultx.datas,
-          'datasets': [getCustomSheet(defaulty.index,datas.length)] ,
+          'title':'',
+          'labels': '',
+          'datasets': '',
         },
 
         chartOptionsLine:{
@@ -225,24 +134,149 @@ name:'Graphs',
           
         },
 
-        customdatasx: defaultx.title,
-        customdatasy: defaulty.title,
-        finalarray: finalarray,
-        data:data,
+        customdatasx: '',
+        customdatasy: '',
+        finalarray: '',
+        finalarraycount: '',
+
+        data:'',
+        datas:'',
         errors: '',
+        defaultx :'',
+        defaulty:''
+
+
+
       } 
   },
 
+mounted(){
+
+
+          for (let [key, value] of Object.entries(this.companies)) {
+            if(value !== 'id' && value !=='_id' ){
+                var array = value;
+            }
+          }
+          var finalarray = [];
+
+          for (let [keys, values] of Object.entries(array)) {
+              if(keys !== 'id' && keys !=='_id' ){
+
+              finalarray.push(keys);
+            }
+          }
+
+          var finalarraycount = finalarray.length
+
+          var data = {}
+          var companiesdata = []
+          var title
+          var datas = []
+          var x;
+
+          for (x = 0; x < finalarraycount; x++) {
+              companiesdata =companies.map(function(key) {
+                     return key[''+finalarray[x] +''];
+                 });
+                 title = finalarray[x]
+                 datas = companiesdata
+                 data[x] =  {title:title, datas:datas}
+
+          };
+          this.datas= datas
+
+          this.data= data
+          this.finalarray = finalarray
+          this.finalarraycount= finalarraycount
+
+
+          this.defaultx = {
+          'index' : 0,
+          'title' : this.data[0].title,
+          'datas' :  this.data[0].datas,
+          },
+          this.defaulty = {
+          'index' : 1,  
+          'title' : this.data[1].title,
+          'datas' :  this.data[1].datas,
+          },
+
+          this.customdatasx= this.defaultx.title,
+          this.customdatasy= this.defaulty.title,
+
+          this.chartDataLine= {
+          'title':this.defaultx.title,
+          'labels': this.defaultx.datas,
+          'datasets': this.getAllSheets(this.defaultx.title),
+        },
+
+          this.chartDataPie= {
+          'title':this.defaultx.title,
+          'labels': this.defaultx.datas,
+          'datasets': [this.getCustomSheet(this.defaulty.index,datas.length)] ,
+        } 
+
+
+},
+
+
   methods:{ 
+       getAllSheets:function(customx) {
+      //set array for default dataset
+      var seet = {}
+      var sheets =[]
+      var y;
 
+        for (y = 0; y < this.finalarraycount; y++) {
+          if(customx !== this.data[y].title && (!isNaN(this.data[y].datas[1])) ){      
+
+             seet = this.getCustomSheet(y)
+             sheets.push(seet)       
+
+          }
+        }
+
+        return sheets
+      },
+
+       getCustomSheet:function(i, numtimes = null) {
+      var backgroundColor =this.getRandomColor() 
+      var borderColor = this.getRandomColor() 
+
+      if(numtimes !== null){
+        backgroundColor = [] 
+        for(var e = 0; e  < numtimes; e ++){
+            var back = this.getRandomColor() 
+            backgroundColor.push(back)
+        }
+      }
+           return {
+              //Data to be represented on x-axis
+              label: this.data[i].title,
+              //Data to be represented on y-axis
+              data: this.data[i].datas,
+              //beautify graphs options
+              borderWidth: 2,
+              borderJoinStyle: 'bevel',
+              cubicInterpolationMode: 'monotone',
+              backgroundColor:backgroundColor,
+              borderColor:borderColor,
+            }
+      },
+
+       getRandomColor:function() {
+        var o = Math.round, r = Math.random, s = 255;
+        return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+      },
       selectx: function () {
-
-        for (x = 0; x < finalarraycount; x++) {
-          if(data[x].title == this.customdatasx){
+        var x
+        for (x = 0; x < this.finalarraycount; x++) {
+          if(this.data[x].title == this.customdatasx){
             this.chartDataLine ={
-              'title' :data[x].title,
-              'labels': data[x].datas,
-              'datasets': getAllSheets(this.customdatasx),
+              'title' :this.data[x].title,
+              'labels': this.data[x].datas,
+              'datasets': this.getAllSheets(this.customdatasx),
              } 
           }
 
@@ -251,23 +285,24 @@ name:'Graphs',
       },  
 
       selecty: function () {
-      var title = defaultx.title  
-      var labels = defaultx.datas 
-      var xvalue = defaultx.title
+      var title = this.defaultx.title  
+      var labels = this.defaultx.datas 
+      var xvalue = this.defaultx.title
       var indexy
+      var x
         //first we get title and lables from customdatasx if exist, else we get default datas data[0]... 
-        if(this.customdatasx !== defaultx.title){
+        if(this.customdatasx !== this.defaultx.title){
             xvalue= this.customdatasx
           }
+        for (x = 0; x < this.finalarraycount; x++) {
 
-        for (x = 0; x < finalarraycount; x++) {
-          
-          if(data[x].title == xvalue){
-              title  = data[x].title
-              labels = data[x].datas
+
+          if(this.data[x].title == xvalue){
+              title  = this.data[x].title
+              labels = this.data[x].datas
           }
 
-          if(data[x].title == this.customdatasy && (!isNaN(data[x].datas[1])) ) {
+          if(this.data[x].title == this.customdatasy && (!isNaN(this.data[x].datas[1])) ) {
               indexy = x
           }
 
@@ -280,39 +315,39 @@ name:'Graphs',
          this.chartDataLine ={
                   'title' :title,
                   'labels': labels,
-                  'datasets':[getCustomSheet(indexy)] 
+                  'datasets':[this.getCustomSheet(indexy)] 
          }  
      
           
       },    
   },
 
-  watch: {
-      'chartDataLine' () {
-        console.log(this.chartDataLine)
-        var xval = this.chartDataLine.title
-        var yval = this.chartDataLine.datasets[0].label 
-        var title
-        var labels
-        var dataset
-        for (x = 0; x < finalarraycount; x++) {          
-            if(data[x].title == xval){
-              title  = data[x].title
-              labels = data[x].datas
-            }  
-            if(data[x].title == yval){
-              yval = x
-            }        
-        }
+  // watch: {
+  //     'chartDataLine' () {
+  //       console.log(this.chartDataLine)
+  //       var xval = this.chartDataLine.title
+  //       var yval = this.chartDataLine.datasets[0].label 
+  //       var title
+  //       var labels
+  //       var dataset
+  //       for (x = 0; x < this.finalarraycount; x++) {          
+  //           if(data[x].title == xval){
+  //             title  = data[x].title
+  //             labels = data[x].datas
+  //           }  
+  //           if(data[x].title == yval){
+  //             yval = x
+  //           }        
+  //       }
 
-        this.chartDataPie ={
-                  'title' :title,
-                  'labels': labels,
-                  'datasets':[getCustomSheet(yval, datas.length )] 
-         } 
+  //       this.chartDataPie ={
+  //                 'title' :title,
+  //                 'labels': labels,
+  //                 'datasets':[this.getCustomSheet(yval, datas.length )] 
+  //        } 
 
-    }
-  },
+  //   }
+  // },
 
 
   components: {
@@ -325,6 +360,8 @@ name:'Graphs',
     PolarAreaChart,
   
 
-  }
+  },
+
+
 }
 </script>

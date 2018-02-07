@@ -14,6 +14,7 @@ Route::get('/upload', function()
 {
     return view('upload');
 });
+Route::get('/apidatas', 'Api\CrudApiController@index')->name('apidatas');
 
 Route::post('/uploadexcel', 'Api\ExcelController@upload')->name('uploadExcel');
 
@@ -26,8 +27,17 @@ Route::get('download/{file_name}', function($file_name = null)
 })->name('download');
 
 
-Route::get('/{path?}', function(){
+Route::get('/', function(){
 	$examplecompanies = DB::collection('companies')->get();
 	$examplecompaniesyears = DB::collection('companiesyears')->get();
 	return view('main')->with(['examplecompanies'=> $examplecompanies, 'examplecompaniesyears' => $examplecompaniesyears]);
+});
+
+Route::get('/api', function(){
+	return view('api');
+});
+
+
+Route::get('/{path?}', function(){
+	return view('main');
 })->name('main');

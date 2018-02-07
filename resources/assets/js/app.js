@@ -8,38 +8,14 @@
 require('./bootstrap');
 window.Vue = require('vue');
 var VueResource = require('vue-resource');
-import VueRouter from 'vue-router'
-import App from './views/App.vue'
-import Years from './views/Years.vue'
+
 
 import BootstrapVue from 'bootstrap-vue'
+import router from './router'
 
 Vue.use(BootstrapVue);
 Vue.use(VueResource)
-Vue.use(VueRouter)
 
-const router = new VueRouter({
-    mode: 'history',
-    routes: [
-        {
-            path: '/',
-            name: 'appexample',
-            component: App
-        },
-
-        {
-            path: '/uploadexcel',
-            name: 'app',
-            component: App
-        },
-        {
-            path: '/years',
-            name: 'years',
-            component: Years
-        },
-
-    ],
-});
 
 
 /**
